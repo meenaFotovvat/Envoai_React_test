@@ -4,6 +4,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 2px solid #e0e0e0;
+  flex: 1;
 }
 
 .data-entry-container h3 {
@@ -18,8 +19,8 @@
 }
 
 .entry-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -90,12 +91,15 @@
 }
 
 @media (max-width: 768px) {
+  .data-entry-container {
+    width: 100%;
+  }
+
   .entry-form {
     grid-template-columns: 1fr;
   }
-  
+
   .entry-form button {
     grid-column: span 1;
   }
 }
-

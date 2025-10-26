@@ -1,12 +1,12 @@
-import './LayoutChallenge.css'
-import DataEntryTable from '../components/DataEntryTable'
-import SystemMonitorTable from '../components/SystemMonitorTable'
+import './LayoutChallenge.css';
+import DataEntryTable from '../components/DataEntryTable';
+import SystemMonitorTable from '../components/SystemMonitorTable';
 
 function LayoutChallenge() {
   return (
     <div className="page-container">
       <h2 className="page-title">Challenge 1: Layout & Functionality Fix</h2>
-      
+
       <div className="instructions">
         <h3>Your Task:</h3>
         <ul>
@@ -19,13 +19,12 @@ function LayoutChallenge() {
         </ul>
       </div>
 
-      <div className="messy-layout">
+      <div className="repaired-layout">
         <DataEntryTable />
         <SystemMonitorTable />
       </div>
     </div>
-  )
+  );
 }
 
-export default LayoutChallenge
-
+export default LayoutChallenge;
