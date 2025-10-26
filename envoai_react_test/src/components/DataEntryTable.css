@@ -80,6 +80,10 @@
   margin-top: 1rem;
 }
 
+.table-container{
+  overflow-x: auto;
+}
+
 .delete-btn {
   background: #dc3545;
   padding: 0.4rem 0.8rem;

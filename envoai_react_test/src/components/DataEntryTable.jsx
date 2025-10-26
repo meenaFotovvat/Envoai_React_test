@@ -1,85 +1,87 @@
-import { useState, useEffect } from 'react'
-import './DataEntryTable.css'
+import { useState, useEffect } from 'react';
+import './DataEntryTable.css';
 
 function DataEntryTable() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     department: '',
-    phone: ''
-  })
-  
-  const [entries, setEntries] = useState([])
+    phone: '',
+  });
+
+  const [entries, setEntries] = useState([]);
 
   useEffect(() => {
-    const savedData = localStorage.getItem('userEntries')
+    const savedData = localStorage.getItem('userEntries');
     if (savedData) {
       try {
-        setEntries(JSON.parse(savedData))
+        setEntries(JSON.parse(savedData));
       } catch (error) {
-        console.error('Error loading data:', error)
+        console.error('Error loading data:', error);
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (entries.length > 0) {
-      localStorage.setItem('userEntries', JSON.stringify(entries))
+      localStorage.setItem('userEntries', JSON.stringify(entries));
     }
-  }, [entries])
+  }, [entries]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
+  const handleInputChange = e => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    
+  const handleSubmit = e => {
+    e.preventDefault();
+
     if (!formData.name || !formData.email || !formData.department || !formData.phone) {
-      alert('Please fill in all fields')
-      return
+      alert('Please fill in all fields');
+      return;
     }
 
     const newEntry = {
       ...formData,
       id: Date.now(),
-      timestamp: new Date().toLocaleString()
-    }
+      timestamp: new Date().toLocaleString(),
+    };
 
-    setEntries(prev => [...prev, newEntry])
-    
+    setEntries(prev => [...prev, newEntry]);
+
     setFormData({
       name: '',
       email: '',
       department: '',
-      phone: ''
-    })
-  }
+      phone: '',
+    });
 
-  const handleDelete = (id) => {
+    console.log('submitted!!', newEntry);
+  };
+
+  const handleDelete = id => {
     setEntries(prev => {
-      const updated = prev.filter(entry => entry.id !== id)
-      localStorage.setItem('userEntries', JSON.stringify(updated))
-      return updated
-    })
-  }
+      const updated = prev.filter(entry => entry.id !== id);
+      localStorage.setItem('userEntries', JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const handleClearAll = () => {
     if (window.confirm('Are you sure you want to clear all entries?')) {
-      setEntries([])
-      localStorage.removeItem('userEntries')
+      setEntries([]);
+      localStorage.removeItem('userEntries');
     }
-  }
+  };
 
   return (
     <div className="data-entry-container">
       <h3>User Data Entry Form</h3>
       <p className="subtitle">Enter 4 parameters and save to local database</p>
-      
+
       <form onSubmit={handleSubmit} className="entry-form">
         <div className="form-group">
           <label htmlFor="name">Name:</label>
@@ -145,42 +147,40 @@ function DataEntryTable() {
         {entries.length === 0 ? (
           <p className="no-entries">No entries yet. Add some data above.</p>
         ) : (
-          <table className="entries-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Department</th>
-                <th>Phone</th>
-                <th>Added</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map(entry => (
-                <tr key={entry.id}>
-                  <td>{entry.name}</td>
-                  <td>{entry.email}</td>
-                  <td>{entry.department}</td>
-                  <td>{entry.phone}</td>
-                  <td>{entry.timestamp}</td>
-                  <td>
-                    <button 
-                      onClick={() => handleDelete(entry.id)}
-                      className="delete-btn"
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="table-container">
+            <table className="entries-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Department</th>
+                  <th>Phone</th>
+                  <th>Added</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {entries.map(entry => (
+                  <tr key={entry.id}>
+                    <td>{entry.name}</td>
+                    <td>{entry.email}</td>
+                    <td>{entry.department}</td>
+                    <td>{entry.phone}</td>
+                    <td>{entry.timestamp}</td>
+                    <td>
+                      <button onClick={() => handleDelete(entry.id)} className="delete-btn">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default DataEntryTable
-
+export default DataEntryTable;
