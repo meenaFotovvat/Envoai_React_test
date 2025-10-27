@@ -27,7 +27,7 @@ function SystemMonitorTable() {
         cpuUsage: data?.cpuUsage,
         networkSpeedRx: data?.networkSpeed?.rx,
         networkSpeedTx: data?.networkSpeed?.tx,
-        diskUsage: (45 + Math.random() * 40).toFixed(1)
+        diskUsage: data?.diskUsage
       })
       } catch (err) {
         console.error("Error fetching stats:", err);
@@ -92,7 +92,7 @@ function SystemMonitorTable() {
           <div className="stat-details">
             <h4>RAM Usage</h4>
             <div className="stat-value">
-              {((systemStats.ramUsed*systemStats.ramTotal)/100).toFixed(2)} GB / {systemStats.ramTotal} GB
+              {(((systemStats.ramUsed*systemStats.ramTotal)/100).toFixed(2))} GB / {systemStats.ramTotal} GB
             </div>
             <div className="stat-percentage">
               {systemStats.ramUsed}%
