@@ -4,9 +4,10 @@ import './SystemMonitorTable.css'
 function SystemMonitorTable() {
   const [systemStats, setSystemStats] = useState({
     ramUsed: 0,
-    ramTotal: 16,
+    ramTotal: 8,
     cpuUsage: 0,
-    networkSpeed: 0,
+    networkSpeedRx: 0,
+    networkSpeedTx:0,
     diskUsage: 0
   })
 
@@ -15,18 +16,33 @@ function SystemMonitorTable() {
   useEffect(() => {
     if (!isMonitoring) return
 
-    const interval = setInterval(() => {
-      setSystemStats({
-        ramUsed: (4 + Math.random() * 10).toFixed(2),
-        ramTotal: 16,
-        cpuUsage: (10 + Math.random() * 80).toFixed(1),
-        networkSpeed: (0.5 + Math.random() * 99.5).toFixed(2),
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/stats");
+        const data = await res.json();
+        
+        setSystemStats({
+        ramUsed: data?.ramUsage,
+        ramTotal: 8,
+        cpuUsage: data?.cpuUsage,
+        networkSpeedRx: data?.networkSpeed?.rx,
+        networkSpeedTx: data?.networkSpeed?.tx,
         diskUsage: (45 + Math.random() * 40).toFixed(1)
       })
-    }, 2000)
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    };
+
+    fetchStats();
+
+        const interval = setInterval(fetchStats, 2000); // refresh every 2s
+
 
     return () => clearInterval(interval)
   }, [isMonitoring])
+
+
 
   const getStatusColor = (value, thresholds) => {
     if (value < thresholds.good) return 'status-good'
@@ -76,10 +92,10 @@ function SystemMonitorTable() {
           <div className="stat-details">
             <h4>RAM Usage</h4>
             <div className="stat-value">
-              {systemStats.ramUsed} GB / {systemStats.ramTotal} GB
+              {((systemStats.ramUsed*systemStats.ramTotal)/100).toFixed(2)} GB / {systemStats.ramTotal} GB
             </div>
             <div className="stat-percentage">
-              {((systemStats.ramUsed / systemStats.ramTotal) * 100).toFixed(1)}%
+              {systemStats.ramUsed}%
             </div>
             <div className="progress-bar">
               <div 
@@ -96,13 +112,13 @@ function SystemMonitorTable() {
             <h4>CPU Usage</h4>
             <div className="stat-value">{systemStats.cpuUsage}%</div>
             <div className="stat-percentage">
-              {parseFloat(systemStats.cpuUsage) < 50 ? 'Normal' : 
-               parseFloat(systemStats.cpuUsage) < 75 ? 'Moderate' : 'High'}
+              {parseFloat(systemStats?.cpuUsage) < 50 ? 'Normal' : 
+               parseFloat(systemStats?.cpuUsage) < 75 ? 'Moderate' : 'High'}
             </div>
             <div className="progress-bar">
               <div 
                 className="progress-fill"
-                style={{ width: `${systemStats.cpuUsage}%` }}
+                style={{ width: `${systemStats?.cpuUsage}%` }}
               ></div>
             </div>
           </div>
@@ -112,15 +128,15 @@ function SystemMonitorTable() {
           <div className="stat-icon">🌐</div>
           <div className="stat-details">
             <h4>Network Speed</h4>
-            <div className="stat-value">{systemStats.networkSpeed} Mbps</div>
+            <div className="stat-value">{systemStats?.networkSpeedRx} MB</div>
             <div className="stat-percentage">
-              {parseFloat(systemStats.networkSpeed) > 50 ? 'Fast' : 
-               parseFloat(systemStats.networkSpeed) > 10 ? 'Moderate' : 'Slow'}
+              {parseFloat(systemStats?.networkSpeedRx) > 50 ? 'Fast' : 
+               parseFloat(systemStats?.networkSpeedRx) > 10 ? 'Moderate' : 'Slow'}
             </div>
             <div className="progress-bar">
               <div 
                 className="progress-fill"
-                style={{ width: `${Math.min(parseFloat(systemStats.networkSpeed), 100)}%` }}
+                style={{ width: `${Math.min(parseFloat(systemStats?.networkSpeedRx), 100)}%` }}
               ></div>
             </div>
           </div>
@@ -130,15 +146,15 @@ function SystemMonitorTable() {
           <div className="stat-icon">💿</div>
           <div className="stat-details">
             <h4>Disk Usage</h4>
-            <div className="stat-value">{systemStats.diskUsage}%</div>
+            <div className="stat-value">{systemStats?.diskUsage}%</div>
             <div className="stat-percentage">
-              {parseFloat(systemStats.diskUsage) < 60 ? 'Healthy' : 
-               parseFloat(systemStats.diskUsage) < 80 ? 'Moderate' : 'High'}
+              {parseFloat(systemStats?.diskUsage) < 60 ? 'Healthy' : 
+               parseFloat(systemStats?.diskUsage) < 80 ? 'Moderate' : 'High'}
             </div>
             <div className="progress-bar">
               <div 
                 className="progress-fill"
-                style={{ width: `${systemStats.diskUsage}%` }}
+                style={{ width: `${systemStats?.diskUsage}%` }}
               ></div>
             </div>
           </div>
@@ -147,8 +163,8 @@ function SystemMonitorTable() {
 
       <div className="monitor-info">
         <p>
-          <strong>Note:</strong> This is a simulated system monitor. 
-          In production, this would connect to actual system APIs or backend services.
+          <strong>Note:</strong> This is a real-time system monitor. 
+          Implemented by nodeJs.
           {isMonitoring && ' Updates every 2 seconds.'}
         </p>
       </div>
