@@ -50,8 +50,9 @@ function BugHunt() {
   };
 
   const removeItem = id => {
-    setItems(items.filter(item => item.id == id));
+    setItems(items.filter(item => item.id !== id));
   };
+
 
   const total = calculateTotal();
   const finalTotal = applyDiscount(total);
