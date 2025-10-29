@@ -13,12 +13,12 @@ function BugHunt() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setCounter(prev => prev + 1);
-  }, 1000);
+    const interval = setInterval(() => {
+      setCounter(prev => prev + 1);
+    }, 1000);
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
   const calculateTotal = () => {
     let total = 0;
@@ -29,7 +29,7 @@ function BugHunt() {
   };
 
   const applyDiscount = total => {
-    return total - (total * discount / 100);
+    return total - (total * discount) / 100;
   };
 
   const handleLogin = () => {
@@ -53,11 +53,8 @@ function BugHunt() {
     setItems(items.filter(item => item.id !== id));
   };
 
-
   const total = calculateTotal();
   const finalTotal = applyDiscount(total);
-
-
 
   return (
     <div className="page-container">

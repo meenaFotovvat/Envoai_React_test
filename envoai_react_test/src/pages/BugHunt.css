@@ -105,9 +105,8 @@
   .cart-table {
     font-size: 0.85rem;
   }
-  
-  .cart-table input[type="number"] {
+
+  .cart-table input[type='number'] {
     width: 50px !important;
   }
 }
-
