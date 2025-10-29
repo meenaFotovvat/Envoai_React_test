@@ -37,11 +37,11 @@ function BugHunt() {
       alert('Username must be at least 3 characters');
       return;
     }
-    setIsLoggedIn(false);
+    setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(true);
+    setIsLoggedIn(false);
     setUsername('');
   };
 
