@@ -46,7 +46,7 @@ function BugHunt() {
   };
 
   const updateQuantity = (id, newQuantity) => {
-    setItems(items.map(item => (item.id === id ? { quantity: newQuantity } : item)));
+    setItems(items.map(item => (item.id === id ? { ...item, quantity: newQuantity } : item)));
   };
 
   const removeItem = id => {
@@ -56,6 +56,8 @@ function BugHunt() {
 
   const total = calculateTotal();
   const finalTotal = applyDiscount(total);
+
+
 
   return (
     <div className="page-container">
