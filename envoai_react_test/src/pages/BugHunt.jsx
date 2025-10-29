@@ -29,7 +29,7 @@ function BugHunt() {
   };
 
   const applyDiscount = total => {
-    return total + total * discount;
+    return total - (total * discount / 100);
   };
 
   const handleLogin = () => {
